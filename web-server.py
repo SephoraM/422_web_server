@@ -19,9 +19,9 @@ near_collisions = 0 # near collision reports
 current_car_count = 0 # will store 30 seconds worth of car counts
 logs = deque(maxlen=30) # will be displayed in browser
 
-# this can hold a maximum of 29 elements and will be upated every 10 seconds
-# meaning that it will store the previous 4.9 minutes of car counts
-car_counts = deque(maxlen=29)
+# this can hold a maximum of 17 elements and will be upated every 10 seconds
+# meaning that it will store the previous 2.9 minutes of car counts
+car_counts = deque(maxlen=17)
 
 # the values returned by the get requests. Represented as a number
 current_road_condition = 1
@@ -42,10 +42,11 @@ def update_count(count):
 # scheduled task
 def update_car_counts():
     global current_car_count
-    logs.append(f"Car count within past 5 minutes: {sum(car_counts) + current_car_count}.")
+    logs.append(f"Car count within past 3 minutes: {sum(car_counts) + current_car_count}.")
     car_counts.append(current_car_count) # first in is replaced if length greater than 9
     current_car_count = 0 # reset current car count
 
+# congestion is relevant for the past 3 minutes
 def update_congestion():
     global congestion
     recent_cars = sum(car_counts) + current_car_count
@@ -76,7 +77,6 @@ def update_road_condition():
         current_road_condition = 2
     else:
         current_road_condition = 1 # night
-    update_congestion()
     logs.append(f"Current road conditions: weather: {current_weather}, time of day {current_time_of_day}, congestion {congestion_options[congestion-1]}.")
     
 
@@ -122,8 +122,9 @@ def get_road_condition_logs():
 
 # background scheduler for scheduled tasks
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_car_counts, trigger="interval", seconds=30)
+scheduler.add_job(func=update_car_counts, trigger="interval", seconds=10)
 scheduler.add_job(func=update_road_condition, trigger="interval", seconds=30)
+scheduler.add_job(func=update_congestion, trigger="interval", seconds=5)
 scheduler.start()
 
 # make sure the scheduler is shutdown properly
