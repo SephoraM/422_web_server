@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Smart Road</title>
+    <style> /* a little styling to make it more readable */
+        header {
+            background-color: blue;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #roadCondtionLogs {
+            max-width: 900px;
+            margin: auto;
+            padding: 10px;
+            text-align: left;
+        }
+        #roadCondtionLogs ul {
+            list-style-type: none; 
+            padding: 0; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Road conditions</h1>
+        <p>Logs of road conditions that are dynamically updated. The web server can be queried for updates.</p>
+    </header>
+    <div id="roadCondtionLogs">
+        <ul><!-- dynamically updated logs on the road conditions --></ul>
+    </div>
+    <script>
+        function fetchAllLogs() {
+            fetch('/get_road_condition_logs')
+                .then(response => response.json())
+                .then(logs => {
+                    const conditions = document.getElementById('roadCondtionLogs');
+                    conditions.innerHTML = '';
+                    logs.forEach(log => {
+                        const li = document.createElement('li');
+                        li.textContent = log;
+                        conditions.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Fatal Error:', error));
+        }
+
+        setInterval(fetchAllLogs, 5000);  // fetch logs every 5 seconds
+    </script>
+</body>
+</html>
