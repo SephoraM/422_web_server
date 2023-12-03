@@ -3,6 +3,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from collections import deque
 import atexit
 import random
+import os
 
 # ----------------Global variables-------------------
 
@@ -133,5 +134,6 @@ def scheduler_shutdown():
 # ----- main program
 
 if __name__ == '__main__':
-    smart_road_app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000)) 
+    smart_road_app.run(host='0.0.0.0', port=port)
 
