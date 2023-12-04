@@ -116,7 +116,7 @@ def get_road_conditions():
 # for both the road conditions and congestion
 @smart_road_app.route('/get_all_conditions', methods=['GET'])
 def get_all_conditions():
-    return jsonify({"road_condition": f"{current_road_condition},{congestion}"})
+    return jsonify({"road_condition": f"All,{current_road_condition},{congestion}"})
 
 # for displaying the current road conditions
 @smart_road_app.route('/get_road_condition_logs')
