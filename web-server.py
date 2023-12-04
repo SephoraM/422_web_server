@@ -108,10 +108,15 @@ def post_count():
 def get_device_updates():
     return jsonify({"congestion": congestion})
 
-# for both the road conditions
+# for the road conditions
 @smart_road_app.route('/get_road_conditions', methods=['GET'])
 def get_road_conditions():
     return jsonify({"road_condition": current_road_condition})
+
+# for both the road conditions and congestion
+@smart_road_app.route('/get_all_conditions', methods=['GET'])
+def get_all_conditions():
+    return jsonify({"road_condition": f"{current_road_condition},{congestion}"})
 
 # for displaying the current road conditions
 @smart_road_app.route('/get_road_condition_logs')
