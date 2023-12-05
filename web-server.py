@@ -128,7 +128,7 @@ def get_road_condition_logs():
 # background scheduler for scheduled tasks
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=update_car_counts, trigger="interval", seconds=10)
-scheduler.add_job(func=update_road_condition, trigger="interval", seconds=30)
+scheduler.add_job(func=update_road_condition, trigger="interval", seconds=15)
 scheduler.add_job(func=update_congestion, trigger="interval", seconds=5)
 scheduler.start()
 
